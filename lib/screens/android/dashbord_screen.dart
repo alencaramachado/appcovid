@@ -1,6 +1,7 @@
 
 
 import 'package:codaula/screens/android/login_screen.dart';
+import 'package:codaula/screens/android/paciente/paciente_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,10 @@ class Dashbord extends StatelessWidget {
                     children: <Widget>[
                       _ItemElemento('PACIENTES', Icons.accessibility_new,
                         onClick:  (){
-                                      debugPrint('pacientes ....');
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PacienteList()
+                                    ));
+
                                       },
                       ),
                       _ItemElemento('RESULTADOS', Icons.check_circle_outline, onClick: (){
