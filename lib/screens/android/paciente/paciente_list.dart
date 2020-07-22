@@ -1,11 +1,13 @@
+import 'dart:io';
 
 import 'package:codaula/database/paciente_dao.dart';
 import 'package:codaula/model/paciente.dart';
+import 'package:codaula/screens/android/paciente/paciente_add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:random_color/random_color.dart';
 
-class PacienteList extends StatefulWidget{
-
+class PacienteList extends StatefulWidget {
   @override
   _PacienteListState createState() => _PacienteListState();
 }
@@ -13,8 +15,6 @@ class PacienteList extends StatefulWidget{
 class _PacienteListState extends State<PacienteList> {
   @override
   Widget build(BuildContext context) {
-
-
     List<Paciente> _pacientes = PacienteDAO.listarPacientes;
 
     return Scaffold(
@@ -36,51 +36,94 @@ class _PacienteListState extends State<PacienteList> {
           ),
           Expanded(
             child: Container(
-             // color: Colors.green,
+              // color: Colors.green,
               child: ListView.builder(
-                itemCount: _pacientes.length,
-                 itemBuilder: (context, index){
-                  final Paciente p = _pacientes[index];
-                   return ItemPaciente(p);
-                  }
-              ),
+                  itemCount: _pacientes.length,
+                  itemBuilder: (context, index) {
+                    final Paciente p = _pacientes[index];
+                    return ItemPaciente(p, onClick: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context)=> PacienteScrean(index: index))
+                      ).then((value) {
+                        setState(() {
+                          debugPrint('... voltou do editar');
+                        });
+                      });
+                    },);
+                  }),
             ),
           ),
-         ],
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+          onPressed: () {
 
-          Paciente p1 = Paciente(18, 'Santos', 'santos@teste', 'tx232', 66, 'teste223');
-          PacienteDAO.adicionar(p1);
-          setState(() {
-            debugPrint(' adiconar pacientes ...');
-          });
-        },
-        child: Icon(Icons.add)
-      ),
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PacienteScrean()
+            )).then((value) {
+
+              setState(() {
+                debugPrint(' retornou do add pacientes ');
+              });
+
+            });
+
+          },
+          child: Icon(Icons.add)),
     );
   }
 }
 
 class ItemPaciente extends StatelessWidget {
-
   final Paciente _paciente;
+  final Function onClick;
 
-  ItemPaciente(this._paciente);
+  ItemPaciente(this._paciente, {@required this.onClick});
+
+  Widget _avatarAntigo(){
+    return CircleAvatar(
+      backgroundImage: AssetImage('imagens/avatar.jpeg'),
+    );
+  }
+
+  Widget _avatarFotoPerfil(){
+
+    RandomColor corRandomica = RandomColor();
+    Color cor = corRandomica.randomColor(
+      colorBrightness: ColorBrightness.light
+    );
+
+    var iniciaNome = this._paciente.nome[0].toUpperCase();
+    if(this._paciente.foto.length> 0){
+      iniciaNome = '';
+    }
+
+    return CircleAvatar(
+      backgroundColor: cor,
+      foregroundColor: Colors.white,
+      backgroundImage: FileImage(File(this._paciente.foto)),
+      radius: 22.0,
+      child: Text(iniciaNome,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 30.0
+      ),),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         ListTile(
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('imagens/avatar.jpeg'),
-          ),
-          title: Text(this._paciente.nome,
+          onTap: () => this.onClick(),
+          leading: _avatarFotoPerfil(),
+          title: Text(
+            this._paciente.nome,
             style: TextStyle(fontSize: 24),
           ),
-          subtitle: Text(this._paciente.email,
+          subtitle: Text(
+            this._paciente.email,
             style: TextStyle(fontSize: 12),
           ),
           trailing: _menu(),
@@ -96,16 +139,13 @@ class ItemPaciente extends StatelessWidget {
     );
   }
 
-  Widget _menu(){
+  Widget _menu() {
     return PopupMenuButton(
-      onSelected: (ItensMenuListPaciente selecionado){
+      onSelected: (ItensMenuListPaciente selecionado) {
         debugPrint('selecionado ... $selecionado');
       },
-      itemBuilder: (BuildContext context) => <PopupMenuItem<ItensMenuListPaciente>>[
-        const PopupMenuItem(
-          value: ItensMenuListPaciente.editar,
-          child: Text('Editar'),
-        ),
+      itemBuilder: (BuildContext context) =>
+          <PopupMenuItem<ItensMenuListPaciente>>[
         const PopupMenuItem(
           value: ItensMenuListPaciente.resultados,
           child: Text('Resultados'),
@@ -119,4 +159,4 @@ class ItemPaciente extends StatelessWidget {
   }
 }
 
- enum ItensMenuListPaciente {editar, resultados, novo_checklist}
+enum ItensMenuListPaciente { resultados, novo_checklist }

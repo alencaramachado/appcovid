@@ -9,9 +9,9 @@ void main() {
 
   _geraPacientes(){
 
-    Paciente p1 = Paciente(18, 'Jose', 'jose@teste', 'tx232', 66, 'teste223');
-    Paciente p2 = Paciente(22, 'Paulo', 'paulo@teste', 'tx232', 56, 'teste223');
-    Paciente p3 = Paciente(22, 'Paulo12', 'paulo@teste', 'tx232', 56, 'teste223');
+    Paciente p1 = Paciente(18, 'Jose', 'jose@teste', 'tx232', 66, 'teste223', '');
+    Paciente p2 = Paciente(22, 'Paulo', 'paulo@teste', 'tx232', 56, 'teste223', '');
+    Paciente p3 = Paciente(22, 'Paulo12', 'paulo@teste', 'tx232', 56, 'teste223', '');
 
     PacienteDAO.adicionar(p1);
     PacienteDAO.adicionar(p2);

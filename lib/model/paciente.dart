@@ -6,9 +6,10 @@ class Paciente {
   String _cartao;
   int _idade;
   String _senha;
+  String _foto;
 
   Paciente(this._id, this._nome, this._email,
-      this._cartao, this._idade, this._senha);
+      this._cartao, this._idade, this._senha, this._foto);
 
   set id(int i){
     this._id = i;
@@ -16,6 +17,11 @@ class Paciente {
   int get id{
     return this._id;
   }
+
+  String get foto{
+    return this._foto;
+  }
+
   String get nome{
     return this._nome;
   }
@@ -30,6 +36,12 @@ class Paciente {
   }
   String get senha{
     return this._senha;
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'Paciente{id: $id, nome: $nome, email: $email}';
   }
 
 }
