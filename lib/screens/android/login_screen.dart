@@ -7,7 +7,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tela de Login'),
+        title: Text('App Aula Flutter'),
       ),
       body: Container(
         //color: Colors.green,

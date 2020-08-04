@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:codaula/database/paciente_dao.dart';
-import 'package:codaula/model/paciente.dart';
+import 'package:codaula/model/paciente_model.dart';
 import 'package:codaula/screens/android/appcovid.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +16,6 @@ void main() {
     PacienteDAO.adicionar(p1);
     PacienteDAO.adicionar(p2);
     PacienteDAO.adicionar(p3);
-
-
 
   }
 

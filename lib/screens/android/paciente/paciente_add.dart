@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:codaula/database/paciente_dao.dart';
-import 'package:codaula/model/paciente.dart';
+import 'package:codaula/model/paciente_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';

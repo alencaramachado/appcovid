@@ -1,4 +1,4 @@
-import 'package:codaula/model/paciente.dart';
+import 'package:codaula/model/paciente_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class PacienteDAO {

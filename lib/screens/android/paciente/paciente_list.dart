@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:codaula/database/check_sintomasDAO.dart';
 import 'package:codaula/database/paciente_dao.dart';
-import 'package:codaula/model/paciente.dart';
+import 'package:codaula/model/check_sintomas_model.dart';
+import 'package:codaula/model/paciente_model.dart';
+import 'package:codaula/screens/android/checklist/checklist_sintomas.dart';
 import 'package:codaula/screens/android/paciente/paciente_add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -41,6 +44,7 @@ class _PacienteListState extends State<PacienteList> {
                   itemCount: _pacientes.length,
                   itemBuilder: (context, index) {
                     final Paciente p = _pacientes[index];
+                    p.id = index;
                     return ItemPaciente(p, onClick: (){
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context)=> PacienteScrean(index: index))
@@ -126,7 +130,7 @@ class ItemPaciente extends StatelessWidget {
             this._paciente.email,
             style: TextStyle(fontSize: 12),
           ),
-          trailing: _menu(),
+          trailing: _menu(context),
         ),
         Divider(
           color: Colors.green,
@@ -139,10 +143,29 @@ class ItemPaciente extends StatelessWidget {
     );
   }
 
-  Widget _menu() {
+  Widget _menu(BuildContext context) {
     return PopupMenuButton(
       onSelected: (ItensMenuListPaciente selecionado) {
-        debugPrint('selecionado ... $selecionado');
+       
+        if(selecionado == ItensMenuListPaciente.novo_checklist){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChecklistSintomas(idpaciente: this._paciente.id,)
+          ));
+        }else{
+
+          if(CheckSintomasDAO.getPacienteCheckSintomas(this._paciente).length > 0){
+                for(CheckSintomasModel csm in CheckSintomasDAO
+                                            .getPacienteCheckSintomas(this._paciente)){
+
+                  debugPrint(csm.toString());
+
+                }
+          }else{
+            debugPrint('NENHUM REGISTRO ENCONTRADO');
+          }
+
+        }
+        
       },
       itemBuilder: (BuildContext context) =>
           <PopupMenuItem<ItensMenuListPaciente>>[
