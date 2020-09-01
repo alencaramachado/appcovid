@@ -18,7 +18,7 @@ class PacienteList extends StatefulWidget {
 class _PacienteListState extends State<PacienteList> {
   @override
   Widget build(BuildContext context) {
-    List<Paciente> _pacientes = PacienteDAO.listarPacientes;
+    //List<Paciente> _pacientes = PacienteDAO.listarPacientes;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,21 +40,7 @@ class _PacienteListState extends State<PacienteList> {
           Expanded(
             child: Container(
               // color: Colors.green,
-              child: ListView.builder(
-                  itemCount: _pacientes.length,
-                  itemBuilder: (context, index) {
-                    final Paciente p = _pacientes[index];
-                    p.id = index;
-                    return ItemPaciente(p, onClick: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context)=> PacienteScrean(index: index))
-                      ).then((value) {
-                        setState(() {
-                          debugPrint('... voltou do editar');
-                        });
-                      });
-                    },);
-                  }),
+              child: _futureBuiderPaciente(),
             ),
           ),
         ],
@@ -76,6 +62,75 @@ class _PacienteListState extends State<PacienteList> {
           child: Icon(Icons.add)),
     );
   }
+
+
+  Widget _futureBuiderPaciente(){
+    return FutureBuilder<List<Paciente>>(
+      initialData: List(),
+      future: PacienteDAO().getPacientes(),
+      builder: (context, snapshot){
+        switch(snapshot.connectionState){
+          case ConnectionState.none:
+            break;
+          case ConnectionState.waiting:
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  Text('Loading')
+                ],
+              ),
+            );
+            break;
+          case ConnectionState.active:
+            break;
+          case ConnectionState.done:
+            final List<Paciente> pacientes = snapshot.data;
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                final Paciente p = pacientes[index];
+                return ItemPaciente(p, onClick: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context)=> PacienteScrean(paciente: p,))
+                  ).then((value) {
+                    setState(() {
+                      debugPrint('... voltou do editar');
+                    });
+                  });
+                },);
+              },
+              itemCount: pacientes.length,
+            );
+            break;
+        }
+        return Text('Problemas em gerar a lista');
+      },
+    );
+  }
+
+  Widget _oldListPaciente(){
+
+    List<Paciente> _pacientes = null;
+
+    return ListView.builder(
+        itemCount: _pacientes.length,
+        itemBuilder: (context, index) {
+          final Paciente p = _pacientes[index];
+          p.id = index;
+          return ItemPaciente(p, onClick: (){
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context)=> PacienteScrean(paciente: p,))
+            ).then((value) {
+              setState(() {
+                debugPrint('... voltou do editar');
+              });
+            });
+          },);
+        });
+  }
+
 }
 
 class ItemPaciente extends StatelessWidget {
@@ -149,20 +204,26 @@ class ItemPaciente extends StatelessWidget {
        
         if(selecionado == ItensMenuListPaciente.novo_checklist){
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ChecklistSintomas(idpaciente: this._paciente.id,)
+            builder: (context) => ChecklistSintomas(paciente: this._paciente,)
           ));
         }else{
 
-          if(CheckSintomasDAO.getPacienteCheckSintomas(this._paciente).length > 0){
-                for(CheckSintomasModel csm in CheckSintomasDAO
-                                            .getPacienteCheckSintomas(this._paciente)){
+          CheckSintomasDAO().getPacienteCheckSintomas(this._paciente).then((sintomas) {
 
-                  debugPrint(csm.toString());
+            if(sintomas.length > 0){
 
-                }
-          }else{
-            debugPrint('NENHUM REGISTRO ENCONTRADO');
-          }
+              for(CheckSintomasModel csm in sintomas){
+                print(csm);
+              }
+
+            }else{
+              print('NENHUM REGISTRO ENCONTRADO');
+            }
+
+          });
+
+
+
 
         }
         

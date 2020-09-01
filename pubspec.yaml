@@ -26,6 +26,7 @@ dependencies:
   camera:
   path_provider:
   path:
+  sqflite:
   image_picker: ^0.6.7+4
   image_cropper: ^1.2.3
   random_color: ^1.0.5

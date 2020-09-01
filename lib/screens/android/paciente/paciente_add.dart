@@ -11,12 +11,16 @@ import 'package:image_picker/image_picker.dart';
 class PacienteScrean extends StatefulWidget {
 
   int index;
-  PacienteScrean({int index}){
-    this.index = index;
+  Paciente paciente;
+  PacienteScrean({Paciente paciente}){
 
-    if(this.index == null){
+    if(paciente == null){
       this.index = -1;
+    }else{
+      this.index = paciente.id;
+      this.paciente = paciente;
     }
+
   }
 
   @override
@@ -42,7 +46,7 @@ class _PacienteScreanState extends State<PacienteScrean> {
     if(widget.index >= 0 && this._isUpdate == false){
       debugPrint('editar index = '+widget.index.toString());
 
-      this._paciente = PacienteDAO.getPaciente(widget.index);
+      this._paciente = widget.paciente;
       this._paciente.id = widget.index;
       this._nomeController.text = this._paciente.nome;
       this._emailController.text = this._paciente.email;
@@ -162,10 +166,10 @@ class _PacienteScreanState extends State<PacienteScrean> {
                         );
 
                     if(widget.index >= 0){
-                      PacienteDAO.autalizar(p);
+                      PacienteDAO().autalizar(p);
                       Navigator.of(context).pop();
                     }else{
-                      PacienteDAO.adicionar(p);
+                      PacienteDAO().adicionar(p);
                       Navigator.of(context).pop();
                     }
 

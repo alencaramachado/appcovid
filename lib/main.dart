@@ -7,17 +7,20 @@ import 'package:flutter/material.dart';
 
 void main() {
 
+  WidgetsFlutterBinding.ensureInitialized();
+
   _geraPacientes(){
 
-    Paciente p1 = Paciente(18, 'Jose', 'jose@teste', 'tx232', 66, 'teste223', '');
-    Paciente p2 = Paciente(22, 'Paulo', 'paulo@teste', 'tx232', 56, 'teste223', '');
-    Paciente p3 = Paciente(22, 'Paulo12', 'paulo@teste', 'tx232', 56, 'teste223', '');
-
-    PacienteDAO.adicionar(p1);
-    PacienteDAO.adicionar(p2);
-    PacienteDAO.adicionar(p3);
+    Paciente p1 = Paciente(0, 'Jose', 'jose@teste', 'tx232', 66, 'teste223', '');
+    //PacienteDAO().adicionar(p1);
 
   }
+
+  PacienteDAO().getPacientes().then((value) {
+    for(Paciente p in value){
+      debugPrint('paciente nome : '+p.nome);
+    }
+  });
 
   if(Platform.isAndroid){
     debugPrint('app no android');

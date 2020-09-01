@@ -11,6 +11,19 @@ class Paciente {
   Paciente(this._id, this._nome, this._email,
       this._cartao, this._idade, this._senha, this._foto);
 
+
+  Map<String, dynamic> toMap(){
+    return{
+      //'id': _id,
+      'nome' : _nome,
+      'email' : _email,
+      'cartao' : _cartao,
+      'idade' : _idade,
+      'senha' : _senha,
+      'foto' : _foto,
+    };
+  }
+
   set id(int i){
     this._id = i;
   }

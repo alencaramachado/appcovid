@@ -19,8 +19,8 @@ class ChecklistSintomas extends StatelessWidget {
   TextEditingController diasSintomasController = new TextEditingController();
 
 
-  ChecklistSintomas({int idpaciente}){
-    this._paciente = PacienteDAO.getPaciente(idpaciente);
+  ChecklistSintomas({Paciente paciente}){
+    this._paciente = paciente;
       _isTosse = false;
       _isDorGarganta = false;
       _isCatarro = false;
